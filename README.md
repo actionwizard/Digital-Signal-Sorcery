@@ -40,4 +40,4 @@ We welcome fellow sorcerers from the community to join our mystical coven. Feel 
 
 ## 📜 License
 
-This project is enchanted under the [your license here] License - seek the wisdom within the [LICENSE](LICENSE) tome for more details.
+This project and related materials are free to use.
