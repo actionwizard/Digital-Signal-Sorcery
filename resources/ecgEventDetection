@@ -1,0 +1,49 @@
+% event detection 
+% QRS peak detection using Balda et al. method
+clear all
+clc
+%%%%%%%%%%%%%%%% INPUT SIGNAL - NOISY ECG %%%%%%%%%%%%%%%%
+x = load('ECG3.dat');
+L = length(x);
+fs = 200;
+t = (1:L)/fs;
+figure(1);
+plot(t,x);
+title('NOISY ECG');
+xlabel('Time');
+ylabel('ECG');
+%%%%%%%%%%%%%%%%% DERIVATIVE FIILTER %%%%%%%%%%%%%%%%%
+% This filter is being used for BLW removal here
+% Filter coefficients
+b=[1 -1];
+a=[1];
+% Frequency response
+frange=0:fs/2048:fs/2;
+[h,w]=freqz(b,a,frange,fs);
+figure(2);
+plot(w,abs(h));
+FILTERS DERIVATIVE 
+OPERATOR
+THRESHOLD
+title('FREQ RESPONSE OF DERIVATIVE FILTER');
+xlabel('Analog frequency (Hz)');
+ylabel('Amplitude');
+% Pole zero plot
+H=tf(b,a,1/fs,'variable','z^-1');
+figure(3);
+pzplot(H);
+title('POLE ZERO PLOT OF DERIVATIVE FILTER');
+xlabel('Real axis');
+ylabel('Imaginary axis');
+xlim([-1.25 1.25]);
+ylim([-1 1]);
+% Output response
+y_d(1) = 0;
+for n=2:1:L
+ y_d(n) = x(n)-x(n-1);
+end
+figure(4);
+plot(t,y_d);
+title('DERIVATIVE FILER : y(n) = (x(n) - x(n-1)');
+xlabel('Time');
+ylabel('ECG after passing through derivative filter');
