@@ -1,0 +1,37 @@
+%Notch filter of cut-off frequency 60 Hz 
+%And, its test over various inputs
+clc
+clear
+load('cleanECG.txt'); %Importing clean ECG signal
+fs = 500; %Sampling frequency
+Ts = 1/fs; %Sampling period
+n = 0:3000-1; %Number of samples
+fc = 60; %Cut-off Frequency of filter
+w0 = (fc/fs)*2*pi; 
+dB3 = 6; %3 dB bandwidth of filter
+r = 1 - (dB3/fs)*pi; %location of pole at dist r
+K = (1-2*r*cos(w0)+r*r)/(2-2*cos(w0)); %Unit gain scale factor
+range = 0:pi/10:pi;
+%Defining the filter coefficients 
+a1 = K;
+a2 = K*2*cos(w0);
+a3 = K;
+b1 = 1;
+b2 = 2*r*cos(w0);
+b3 = r*r;
+num = [a1 -a2 a3];
+den = [b1 -b2 b3];
+samples = 75; 
+%For Frequency Response
+[h,w]=freqz(num,den);
+figure;
+subplot(2,1,1);
+plot(w*fs/(2*pi),20*log10(abs(h)));
+title('Frequency Response of a Notch filter');
+xlabel('Analog Frequency (Hz)');
+ylabel('Magnitude (dB)');
+subplot(2,1,2);
+plot(w,20*log10(abs(h)));
+xlabel('Digital Frequency (Radian/Sample)');
+ylabel('Magnitude (dB)');
+xlim([0,3.14]);
